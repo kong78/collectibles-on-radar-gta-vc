@@ -79,41 +79,25 @@ void Util::initStoreList()
 
     // Trying to search for the 'robbed_shop_1' variables in ScriptSpace (for the first 12 coords in ROBBING.SC)
     unsigned char patternStore1[] = { 0xA4, 0x03, 0x53, 0x48, 0x4F, 0x50, 0x53, 0x00 }; // "SCRIPT_NAME SHOPS\0"
-    unsigned char* pPatternStore1 = Util::findAddressScriptSpace(patternStore1, sizeof (patternStore1));
+    unsigned char* pPatternStore1 = Util::findAddressScriptSpace(patternStore1, sizeof (patternStore1), -88);
     if (pPatternStore1)
     {
-        // wildcards:                      {                                 ??    ??          ??    ??    ??    ?? }
-        unsigned char patternStoreVars[] = { 0x51, 0x00, 0x04, 0x00, 0x02, 0xD0, 0x17, 0x01, 0xA0, 0x15, 0xFF, 0xFF }; // "return; $1524 = -60000"
-        size_t start = (pPatternStore1 - &CTheScripts::ScriptSpace[0]) - 1;
-        // offset = 84 so I skip to the robbed_shop_1 variable
-        unsigned char* pPatternStoreVars = Util::findAddressScriptSpace(patternStoreVars, sizeof (patternStoreVars), 2 + 79 + 3, start, false);
-        if (pPatternStoreVars)
+        for (size_t i = 0; i < 12; ++i)
         {
-            for (size_t i = 0; i < 12; ++i)
-            {
-                size_t ssIdx = *((short*) (pPatternStoreVars + 7 * i)); // 6176, ..., 6220
-                Util::s_storeList[i].done = (int*) &CTheScripts::ScriptSpace[ssIdx];
-            }
+            size_t ssIdx = *((short*) (pPatternStore1 + 7 * i)); // 6176, ..., 6220
+            Util::s_storeList[i].done = (int*) &CTheScripts::ScriptSpace[ssIdx];
         }
     }
 
     // Trying to search for the 'robbed_hardshop_1' variables in ScriptSpace (for the last 3 coords in AMMU.SC)
     unsigned char patternStore2[] = { 0xA4, 0x03, 0x41, 0x4D, 0x4D, 0x55, 0x00 }; // "SCRIPT_NAME AMMU\0"
-    unsigned char* pPatternStore2 = Util::findAddressScriptSpace(patternStore2, sizeof (patternStore2));
+    unsigned char* pPatternStore2 = Util::findAddressScriptSpace(patternStore2, sizeof (patternStore2), -39);
     if (pPatternStore2)
     {
-        // wildcards:                      {                                 ??    ??          ?? }
-        unsigned char patternStoreVars[] = { 0x4E, 0x00, 0x04, 0x00, 0x02, 0x6C, 0x0D, 0x04, 0x00 }; // "terminate_this_script; $859 = 0"
-        size_t start = (pPatternStore2 - &CTheScripts::ScriptSpace[0]) - 1;
-        // offset = 212 so I skip to the robbed_shop_1 variable
-        unsigned char* pPatternStoreVars = Util::findAddressScriptSpace(patternStoreVars, sizeof (patternStoreVars), 2 + 207 + 3, start, false);
-        if (pPatternStoreVars)
+        for (size_t i = 0; i < 3; ++i)
         {
-            for (size_t i = 0; i < 3; ++i)
-            {
-                size_t ssIdx = *((short*) (pPatternStoreVars + 7 * i)); // 3544, 3548, 3552
-                Util::s_storeList[12 + i].done = (int*) &CTheScripts::ScriptSpace[ssIdx];
-            }
+            size_t ssIdx = *((short*) (pPatternStore2 + 7 * i)); // 3544, 3548, 3552
+            Util::s_storeList[12 + i].done = (int*) &CTheScripts::ScriptSpace[ssIdx];
         }
     }
 }
@@ -132,21 +116,13 @@ void Util::initUsjList()
 
     // Trying to search for the 'flag_usj1_passed' variables in ScriptSpace
     unsigned char patternUsj[] = { 0xA4, 0x03, 0x55, 0x53, 0x4A, 0x00 }; // pattern: "SCRIPT_NAME USJ\0"
-    unsigned char* pPatternUsj = Util::findAddressScriptSpace(patternUsj, sizeof (patternUsj));
+    unsigned char* pPatternUsj = Util::findAddressScriptSpace(patternUsj, sizeof (patternUsj), -285);
     if (pPatternUsj)
     {
-        // wildcards:                    {                                 ??    ??             }
-        unsigned char patternUsjVars[] = { 0x4E, 0x00, 0x04, 0x00, 0x02, 0x6c, 0x0c, 0x04, 0x00 }; // "terminate_this_script; $795 = 0"
-        size_t start = (pPatternUsj - &CTheScripts::ScriptSpace[0]) - 1;
-        // offset = 5 so I skip to the flag_usj1_passed variable
-        unsigned char* pPatternUsjVars = Util::findAddressScriptSpace(patternUsjVars, sizeof (patternUsjVars), 2 + 3, start, false);
-        if (pPatternUsjVars)
+        for (size_t i = 0; i < (sizeof (Util::s_usjList) / sizeof (tUsj)); ++i)
         {
-            for (size_t i = 0; i < (sizeof (Util::s_usjList) / sizeof (tUsj)); ++i)
-            {
-                size_t ssIdx = *((short*) (pPatternUsjVars + 7 * i)); // 3180, 3184, ..., 3320
-                Util::s_usjList[i].done = (int*) &CTheScripts::ScriptSpace[ssIdx];
-            }
+            size_t ssIdx = *((short*) (pPatternUsj + 7 * i)); // 3180, 3184, ..., 3320
+            Util::s_usjList[i].done = (int*) &CTheScripts::ScriptSpace[ssIdx];
         }
     }
 }
