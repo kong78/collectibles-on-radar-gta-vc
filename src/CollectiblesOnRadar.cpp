@@ -32,6 +32,7 @@ public:
         plugin::Events::initRwEvent += []()
         {
             Settings::read();
+            s_modEnabled = Settings::s_enabledOnStartup;
         };
 
         plugin::Events::initGameEvent += []()
@@ -177,7 +178,8 @@ private:
                     || (Settings::s_drawRampages && model == 383)
                     || (Settings::s_drawBribes && model == 375)
                     || (Settings::s_drawArmours && model == 368)
-                    || (Settings::s_drawWeapons && model >= 258 && model <= 294) // TODO Find out the type of map weapons (not the ones dropped)
+                    || (Settings::s_drawWeapons && (model >= 258 && model <= 294)
+                        && (type < PICKUP_ONCE || type > PICKUP_ONCE_TIMEOUT_SLOW || Settings::s_drawDroppedWeapons)) // also draw dropped weapons?
                     || (Settings::s_drawHealths && model == 366)))
             {
                 const CVector& pickupPos = CPickups::aPickUps[i].vecPos;

@@ -41,6 +41,8 @@ CRGBA Settings::s_colorBribe(Settings::COLOR_DEFAULT);
 CRGBA Settings::s_colorArmour(Settings::COLOR_DEFAULT);
 CRGBA Settings::s_colorWeapon(Settings::COLOR_DEFAULT);
 CRGBA Settings::s_colorHealth(Settings::COLOR_DEFAULT);
+bool Settings::s_enabledOnStartup = true;
+bool Settings::s_drawDroppedWeapons = false;
 
 void Settings::read()
 {
@@ -75,6 +77,9 @@ void Settings::read()
     s_colorArmour.Set(toRGBA(iniReader.ReadString(EXTRA, "color_armour", ""), COLOR_DEFAULT.ToInt()));
     s_colorWeapon.Set(toRGBA(iniReader.ReadString(EXTRA, "color_weapon", ""), COLOR_DEFAULT.ToInt()));
     s_colorHealth.Set(toRGBA(iniReader.ReadString(EXTRA, "color_health", ""), COLOR_DEFAULT.ToInt()));
+
+    s_enabledOnStartup = iniReader.ReadBoolean(EXTRA, "enabled_on_startup", true);
+    s_drawDroppedWeapons = iniReader.ReadBoolean(EXTRA, "draw_dropped_weapons", false);
 }
 
 unsigned int Settings::toRGBA(const std::string& str, unsigned int defaultValue)
